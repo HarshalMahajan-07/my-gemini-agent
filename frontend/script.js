@@ -1,5 +1,6 @@
 // Replace this after backend deployment (example: "https://my-agent.onrender.com")
-const BACKEND_URL = "https://YOUR_BACKEND_URL/chat";
+const BACKEND_URL = "https://jarvis-the-ai-agent.up.railway.app/chat";
+
 
 const inputEl = document.getElementById("userInput");
 const sendBtn = document.getElementById("sendBtn");
