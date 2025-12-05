@@ -40,28 +40,19 @@ async def root():
     return {"status": "ok", "message": "AI agent backend is running."}
 
 
+from openai import OpenAI
+client = OpenAI(api_key=OPENAI_API_KEY)
+
 @app.post("/chat", response_model=ChatResponse)
 async def chat_endpoint(body: ChatRequest):
-    """
-    Simple chat endpoint.
-    Input: { "message": "your text" }
-    Output: { "reply": "model response" }
-    """
-    completion = client.chat.completions.create(
-        model="gpt-4.1-mini",  # you can change to gpt-4.1 or better if you want
-        messages=[
-            {
-                "role": "system",
-                "content": (
-                    "You are a helpful, concise AI assistant. "
-                    "Explain things simply and clearly like a tutor."
-                ),
-            },
-            {"role": "user", "content": body.message},
-        ],
-        max_tokens=400,
-        temperature=0.7,
+
+    response = client.responses.create(
+        model="gpt-4.1-mini",
+        input=body.message,
+        system="You are a helpful, concise AI assistant.",
+        max_output_tokens=400
     )
 
-    reply_text = completion.choices[0].message.content
+    reply_text = response.output[0].content[0].text
+
     return ChatResponse(reply=reply_text)
