@@ -48,11 +48,18 @@ async def chat_endpoint(body: ChatRequest):
 
     response = client.responses.create(
         model="gpt-4.1-mini",
-        input=body.message,
-        system="You are a helpful, concise AI assistant.",
-        max_output_tokens=400
+        input=[
+            {
+                "role": "system",
+                "content": "You are a helpful, concise AI assistant."
+            },
+            {
+                "role": "user",
+                "content": body.message
+            }
+        ]
     )
 
-    reply_text = response.output[0].content[0].text
-
+    reply_text = response.output_text
     return ChatResponse(reply=reply_text)
+
